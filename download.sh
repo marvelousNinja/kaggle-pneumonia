@@ -12,3 +12,7 @@ unzip stage_1_test_images.zip -d ./test
 rm stage_1_test_images.zip
 unzip stage_1_train_images.zip -d ./train
 rm stage_1_train_images.zip
+unzip stage_1_detailed_class_info.csv.zip
+rm stage_1_detailed_class_info.csv.zip
+unzip stage_1_train_labels.csv.zip
+rm stage_1_train_labels.csv.zip
