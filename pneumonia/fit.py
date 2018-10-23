@@ -8,7 +8,6 @@ from pneumonia.callbacks.model_checkpoint import load_checkpoint
 from pneumonia.generators import get_train_generator
 from pneumonia.generators import get_validation_generator
 from pneumonia.loggers import make_loggers
-from pneumonia.losses import focal_loss
 from pneumonia.models.retinanet import Retinanet
 from pneumonia.training import fit_model
 from pneumonia.utils import as_cuda
@@ -37,7 +36,7 @@ def fit(
     if checkpoint_path:
         model = load_checkpoint(checkpoint_path)
     else:
-        model = Devilnet(2)
+        model = Retinanet(1, 9)
 
     model = as_cuda(model)
     optimizer = torch.optim.SGD(filter(lambda param: param.requires_grad, model.parameters()), lr, weight_decay=1e-3, momentum=0.9, nesterov=True)
@@ -47,7 +46,7 @@ def fit(
         # CyclicLR(step_size=len(train_generator) * 2, min_lr=0.0001, max_lr=0.005, optimizer=optimizer, logger=logger),
         # LRSchedule(optimizer, [(0, 0.003), (2, 0.01), (12, 0.001), (17, 0.0001)], logger),
         # LRRangeTest(0.00001, 1.0, 20000, optimizer, image_logger),
-        LROnPlateau('val_mean_ap', optimizer, mode='max', factor=0.5, patience=8, min_lr=0, logger=logger),
+        # LROnPlateau('val_mean_ap', optimizer, mode='max', factor=0.5, patience=8, min_lr=0, logger=logger),
         # ConfusionMatrix([0, 1], logger)
     ]
 
@@ -69,7 +68,7 @@ def fit(
         num_epochs=num_epochs,
         logger=logger,
         callbacks=callbacks,
-        metrics=[mean_iou, mean_ap]
+        metrics=[]
     )
 
 def prof():

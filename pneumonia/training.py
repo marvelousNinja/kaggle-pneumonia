@@ -4,9 +4,9 @@ import torchvision
 from tabulate import tabulate
 from tqdm import tqdm
 
-from salt.utils import from_numpy
-from salt.utils import to_numpy
-from salt.utils import as_cuda
+from pneumonia.utils import from_numpy
+from pneumonia.utils import to_numpy
+from pneumonia.utils import as_cuda
 
 def fit_model(
         model,
@@ -53,11 +53,6 @@ def fit_model(
             all_gt.append(gt)
             inputs, gt = from_numpy(inputs), from_numpy(gt)
             outputs = model(inputs)
-            # TODO AS: Extract as cmd opt
-            flipped_outputs = torch.sigmoid(model(inputs.flip(dims=(3,))).flip(dims=(3,)))
-            outputs = torch.sigmoid(outputs)
-            outputs = (outputs + flipped_outputs) / 2
-            outputs = torch.log(outputs / (1 - outputs))
             logs['val_loss'] += loss_fn(outputs, gt).data[0]
             for func in metrics: logs[f'val_{func.__name__}'] += func(outputs.detach(), gt)
 

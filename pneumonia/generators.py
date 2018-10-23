@@ -28,16 +28,34 @@ class DataGenerator:
         for i in range(num_slices):
             start = i * prefetch_size
             end = start + prefetch_size
-            for output in pool.imap(self.transform, self.records[start:end]):
+            for output in map(self.transform, self.records[start:end]):
                 batch.append(output)
                 if len(batch) >= self.batch_size:
                     split_outputs = list(zip(*batch))
-                    yield list(map(np.stack, split_outputs))
+                    merged_outputs = []
+                    for split_output in split_outputs:
+                        if len(set(list(map(lambda sample: sample.shape, split_output)))) == 1:
+                            merged_outputs.append(np.stack(split_output))
+                        elif split_output[0].shape[0] == 1:
+                            enumerated_samples = []
+                            for i, sample in enumerate(split_output):
+                                enumerated_samples.extend(np.hstack([np.tile([i], (len(sample), 1)), sample]))
+                            merged_outputs.append(np.stack(enumerated_samples))
+                    yield list(map(np.stack, merged_outputs))
                     batch = []
 
         if (not self.drop_last) and len(batch) > 0:
             split_outputs = list(zip(*batch))
-            yield list(map(np.stack, split_outputs))
+            merged_outputs = []
+            for split_output in split_outputs:
+                if len(set(list(map(lambda sample: sample.shape, split_output)))) == 1:
+                    merged_outputs.append(np.stack(split_output))
+                elif split_output[0].shape[0] == 1:
+                    enumerated_samples = []
+                    for i, sample in enumerate(split_output):
+                        enumerated_samples.extend(np.hstack([np.tile([i], (len(sample), 1)), sample]))
+                    merged_outputs.append(np.stack(enumerated_samples))
+            yield list(map(np.stack, merged_outputs))
 
         pool.close()
 
