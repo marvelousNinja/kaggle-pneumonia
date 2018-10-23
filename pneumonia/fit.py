@@ -14,6 +14,7 @@ from pneumonia.utils import as_cuda
 
 
 def compute_loss(outputs, gt):
+    import pdb; pdb.set_trace()
     return 0
 
 def fit(

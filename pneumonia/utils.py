@@ -29,7 +29,7 @@ def read_image(path):
 def load_bboxes(sample_db, image_path):
     patient_id = image_path.split('/')[-1].split('.')[0]
     bboxes = sample_db[sample_db['patientId'] == patient_id]
-    return bboxes[['x', 'y', 'width', 'height', 'Target']].values
+    return bboxes[['x', 'y', 'width', 'height']].values
 
 def as_cuda(tensor):
     if torch.cuda.is_available():
