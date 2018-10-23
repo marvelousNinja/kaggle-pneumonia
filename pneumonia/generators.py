@@ -35,14 +35,12 @@ class DataGenerator:
                     merged_outputs = []
                     for split_output in split_outputs:
                         # TODO AS: Will not work with 1 sample in the batch
-                        import pdb; pdb.set_trace()
                         if split_output[0].shape[0] == 1:
                             enumerated_samples = []
                             for i, sample in enumerate(split_output):
                                 enumerated_samples.extend(np.hstack([np.tile([i], (len(sample), 1)), sample]))
                             merged_outputs.append(np.stack(enumerated_samples))
                         else:
-                        #if len(set(list(map(lambda sample: sample.shape, split_output)))) == 1:
                             merged_outputs.append(np.stack(split_output))
 
                     yield list(map(np.stack, merged_outputs))
@@ -59,7 +57,6 @@ class DataGenerator:
                         enumerated_samples.extend(np.hstack([np.tile([i], (len(sample), 1)), sample]))
                     merged_outputs.append(np.stack(enumerated_samples))
                 else:
-                #if len(set(list(map(lambda sample: sample.shape, split_output)))) == 1:
                     merged_outputs.append(np.stack(split_output))
             yield list(map(np.stack, merged_outputs))
 

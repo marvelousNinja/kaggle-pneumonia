@@ -17,7 +17,7 @@ class ConvertBboxesToAlbumentations:
 class ConvertBboxesToOriginal:
     def __call__(self, **args):
         if args.get('bboxes') is None: return args
-        args['bboxes'] = np.array(convert_bboxes_from_albumentations(args.get('bboxes'), 'coco', args['image'].shape[1], args['image'].shape[2]))
+        args['bboxes'] = np.array(convert_bboxes_from_albumentations(args.get('bboxes'), 'pascal_voc', args['image'].shape[1], args['image'].shape[2]))
         return args
 
 class ChannelsFirst:

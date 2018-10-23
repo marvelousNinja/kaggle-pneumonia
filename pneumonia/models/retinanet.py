@@ -133,11 +133,9 @@ class Retinanet(torch.nn.Module):
         d2 = self.decoders[1](x3) + self.upscalers[0](d1)
         d3 = self.decoders[2](x2) + self.upscalers[0](d2)
         d4 = self.decoders[3](x1) + self.upscalers[0](d3)
-
-        bbox_logits = [self.bbox_classifier(d) for d in [d1, d2, d3, d4]]
-        bbox_deltas = [self.bbox_regressor(d) for d in [d1, d2, d3, d4]]
-
-        return bbox_logits, bbox_deltas
+        bbox_logits = [self.bbox_classifier(d).view(x.shape[0], -1, 1) for d in [d1, d2, d3, d4]]
+        bbox_deltas = [self.bbox_regressor(d).view(x.shape[0], -1, 4) for d in [d1, d2, d3, d4]]
+        return torch.cat(bbox_logits, dim=1), torch.cat(bbox_deltas, dim=1)
 
 
 if __name__ == '__main__':

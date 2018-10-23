@@ -8,14 +8,10 @@ from pneumonia.callbacks.model_checkpoint import load_checkpoint
 from pneumonia.generators import get_train_generator
 from pneumonia.generators import get_validation_generator
 from pneumonia.loggers import make_loggers
+from pneumonia.losses import compute_loss
 from pneumonia.models.retinanet import Retinanet
 from pneumonia.training import fit_model
 from pneumonia.utils import as_cuda
-
-
-def compute_loss(outputs, gt):
-    import pdb; pdb.set_trace()
-    return 0
 
 def fit(
         num_epochs=100,
@@ -37,7 +33,7 @@ def fit(
     if checkpoint_path:
         model = load_checkpoint(checkpoint_path)
     else:
-        model = Retinanet(1, 9)
+        model = Retinanet(1, 3)
 
     model = as_cuda(model)
     optimizer = torch.optim.SGD(filter(lambda param: param.requires_grad, model.parameters()), lr, weight_decay=1e-3, momentum=0.9, nesterov=True)
