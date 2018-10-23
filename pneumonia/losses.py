@@ -12,7 +12,8 @@ from pneumonia.utils import generate_anchor_grid
 def compute_loss(outputs, gt):
     loss = 0
     gt = to_numpy(gt)
-    for import pdb; pdb.set_trace()
+    for i, (pred_logits, pred_deltas) in enumerate(zip(*outputs)):
+        import pdb; pdb.set_trace()
         gt_boxes = gt[gt[:, 0] == i][:, 1:]
 
         anchors = []
