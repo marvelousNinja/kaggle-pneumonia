@@ -57,7 +57,7 @@ def fit_model(
             for func in metrics: logs[f'val_{func.__name__}'] += func(outputs.detach(), gt)
 
             if isinstance(outputs, tuple):
-                all_outputs.append(list(map(to_numpy, outputs)))
+                all_outputs.append(tuple(map(to_numpy, outputs)))
             else:
                 all_outputs.append(to_numpy(outputs))
         logs['val_loss'] /= num_batches

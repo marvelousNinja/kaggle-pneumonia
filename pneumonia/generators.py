@@ -35,7 +35,7 @@ class DataGenerator:
                     merged_outputs = []
                     for split_output in split_outputs:
                         # TODO AS: Will not work with 1 sample in the batch
-                        if split_output[0].shape[0] == 1:
+                        if split_output[0].shape[1] == 4:
                             enumerated_samples = []
                             for i, sample in enumerate(split_output):
                                 enumerated_samples.extend(np.hstack([np.tile([i], (len(sample), 1)), sample]))
@@ -51,7 +51,7 @@ class DataGenerator:
             merged_outputs = []
             for split_output in split_outputs:
                 # TODO AS: Will not work with 1 sample in the batch
-                if split_output[0].shape[0] == 1:
+                if split_output[0].shape[1] == 4:
                     enumerated_samples = []
                     for i, sample in enumerate(split_output):
                         enumerated_samples.extend(np.hstack([np.tile([i], (len(sample), 1)), sample]))
