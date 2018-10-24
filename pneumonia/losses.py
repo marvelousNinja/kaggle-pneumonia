@@ -29,7 +29,7 @@ def compute_loss(outputs, gt):
 
         not_ignored = (true_labels != -1).nonzero().view(-1)
         if len(not_ignored) > 0:
-            sample_loss += focal_loss(pred_logits[not_ignored], true_labels[not_ignored])
+            sample_loss += sum(focal_loss(pred_logits[not_ignored], true_labels[not_ignored], average=False)) / len(positive)
         loss += sample_loss
     return loss / len(outputs[0])
 
