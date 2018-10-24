@@ -5,6 +5,7 @@ from fire import Fire
 
 from pneumonia.callbacks.model_checkpoint import ModelCheckpoint
 from pneumonia.callbacks.model_checkpoint import load_checkpoint
+from pneumonia.callbacks.lr_on_plateau import LROnPlateau
 from pneumonia.generators import get_train_generator
 from pneumonia.generators import get_validation_generator
 from pneumonia.loggers import make_loggers
@@ -43,7 +44,7 @@ def fit(
         # CyclicLR(step_size=len(train_generator) * 2, min_lr=0.0001, max_lr=0.005, optimizer=optimizer, logger=logger),
         # LRSchedule(optimizer, [(0, 0.003), (2, 0.01), (12, 0.001), (17, 0.0001)], logger),
         # LRRangeTest(0.00001, 1.0, 20000, optimizer, image_logger),
-        # LROnPlateau('val_mean_ap', optimizer, mode='max', factor=0.5, patience=8, min_lr=0, logger=logger),
+        LROnPlateau('val_loss', optimizer, mode='min', factor=0.5, patience=4, min_lr=0, logger=logger),
         # ConfusionMatrix([0, 1], logger)
     ]
 
